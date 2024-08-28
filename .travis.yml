@@ -1,0 +1,25 @@
+branches:
+  only:
+    - main
+language: node_js
+node_js:
+  - 16
+
+services:
+  - docker
+
+script:
+## Build
+  - docker-compose -f docker-compose-build.yaml build
+## Tagging
+  - docker tag udagram-api-feed sontm17/udagram-api-feed:latest
+  - docker tag udagram-api-user sontm17/udagram-api-user:latest
+  - docker tag udagram-frontend sontm17/udagram-frontend:latest
+  - docker tag reverseproxy sontm17/reverseproxy:latest
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+## Push
+  - docker push sontm17/udagram-api-feed
+  - docker push sontm17/udagram-api-user
+  - docker push sontm17/udagram-frontend
+  - docker push sontm17/reverseproxy
