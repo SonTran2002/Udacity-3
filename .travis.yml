@@ -8,7 +8,6 @@ node_js:
 services:
   - docker
 
-  
 script:
 ## Build
   - docker-compose -f docker-compose-build.yaml build
